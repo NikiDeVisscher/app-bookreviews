@@ -1,0 +1,150 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix schema: <http://schema.org/> .
+@prefix book: <http://example.org/bookreview/book/> .
+@prefix review: <http://example.org/bookreview/review/> .
+@prefix author: <http://example.org/bookreview/author/> .
+@prefix reader: <http://example.org/bookreview/reader/> .
+@prefix account: <http://example.org/bookreview/account/> .
+@prefix bf: <http://id.loc.gov/ontologies/bibframe/> .
+@prefix mu: <http://mu.semte.ch/vocabularies/core/> .
+
+book:book1 a bf:Work ;
+    mu:uuid "book-1-uuid" ;
+    bf:title "The Great Gatsby" ;
+    schema:author author:author1 ;
+    schema:genre "Fiction" ;
+    schema:pages 180 ;
+    schema:language "English" ;
+    schema:publisher "Scribner" ;
+    bf:date "1925-04-10"^^xsd:date ;
+    bf:isbn "9780743273565" ;
+    schema:averageRating 4.5 .
+
+book:book2 a bf:Work ;
+    mu:uuid "book-2-uuid" ;
+    bf:title "To Kill a Mockingbird" ;
+    schema:author author:author2 ;
+    schema:genre "Fiction" ;
+    schema:pages 281 ;
+    schema:language "English" ;
+    schema:publisher "J.B. Lippincott & Co." ;
+    bf:date "1960-07-11"^^xsd:date ;
+    bf:isbn "9780061120084" ;
+    schema:averageRating 4.8 .
+
+book:book3 a bf:Work ;
+    mu:uuid "book-3-uuid" ;
+    bf:title "1984" ;
+    schema:author author:author3 ;
+    schema:genre "Dystopian" ;
+    schema:pages 328 ;
+    schema:language "English" ;
+    schema:publisher "Secker & Warburg" ;
+    bf:date "1949-06-08"^^xsd:date ;
+    bf:isbn "9780451524935" ;
+    schema:averageRating 4.6 .
+
+author:author1 a schema:Person ;
+    mu:uuid "author-1-uuid" ;
+    schema:name "F. Scott Fitzgerald" .
+
+author:author2 a schema:Person ;
+    mu:uuid "author-2-uuid" ;
+    schema:name "Harper Lee" ;
+    account:account account:account4 .
+
+author:author3 a schema:Person ;
+    mu:uuid "author-3-uuid" ;
+    schema:name "George Orwell" .
+
+reader:reader1 a schema:Person ;
+    mu:uuid "reader-1-uuid" ;
+    schema:name "An Doe" ;
+    account:account account:account1 .
+
+reader:reader2 a schema:Person ;
+    mu:uuid "reader-2-uuid" ;
+    schema:name "John Smith" ;
+    account:account account:account2 .
+
+reader:reader3 a schema:Person ;
+    mu:uuid "reader-3-uuid" ;
+    schema:name "Lena Martin" ;
+    account:account account:account3 .
+
+review:review1 a schema:Review ;
+    mu:uuid "review-1-uuid" ;
+    schema:reviewContent "A classic novel that explores themes of decadence and excess in the Jazz Age. A must-read!" ;
+    schema:reviewRating 5 ;
+    schema:author reader:reader1 ;
+    schema:about book:book1 ;
+    schema:dateCreated "2020-01-15"^^xsd:date .
+
+review:review2 a schema:Review ;
+    mu:uuid "review-2-uuid" ;
+    schema:reviewContent "As a reader you are never allowed to feel with Tom Robinson, the Black man who is innocently convicted for raping a white woman, because all the Black characters in this tale are sidelined. Sadly, I cannot recommend this book." ;
+    schema:reviewRating 1 ;
+    schema:author reader:reader2 ;
+    schema:about book:book2 ;
+    schema:dateCreated "2021-03-22"^^xsd:date .
+
+review:review3 a schema:Review ;
+    mu:uuid "review-3-uuid" ;
+    schema:reviewContent "While the plot was very gripping and well-written, the book didn't actually instruct me on how to kill a mockingbird." ;
+    schema:reviewRating 2 ;
+    schema:author reader:reader1 ;
+    schema:about book:book2 ;
+    schema:dateCreated "2021-07-10"^^xsd:date .
+
+review:review4 a schema:Review ;
+    mu:uuid "review-4-uuid" ;
+    schema:reviewContent "A chilling depiction of a dystopian future that feels eerily relevant today. Orwell's vision is both terrifying and thought-provoking." ;
+    schema:reviewRating 5 ;
+    schema:author reader:reader3 ;
+    schema:about book:book3 ;
+    schema:dateCreated "2019-11-05"^^xsd:date .
+
+review:review5 a schema:Review ;
+    mu:uuid "review-5-uuid" ;
+    schema:reviewContent "1984 is a profound novel that delves into the dangers of totalitarianism and extreme political ideology. A must-read for everyone." ;
+    schema:reviewRating 5 ;
+    schema:author reader:reader1 ;
+    schema:about book:book3 ;
+    schema:dateCreated "2020-06-18"^^xsd:date .
+
+account:Account a rdfs:Class ;
+    rdfs:label "Account" .
+
+account:account1 a account:Account ;
+    mu:uuid "account-1-uuid" ;
+    schema:userName "an_doe123" ;
+    schema:password "securepassword" ;
+    schema:email "an.doe@mail.com" ;
+    schema:creationDate "2019-06-20"^^xsd:date ;
+    schema:hasRole "reader" .
+
+account:account2 a account:Account ;
+    mu:uuid "account-2-uuid" ;
+    schema:userName "john_smith456" ;
+    schema:password "anotherpassword" ;
+    schema:email "johnsmith@mail.com" ;
+    schema:creationDate "2018-09-15"^^xsd:date ;
+    schema:hasRole "reader" .
+
+account:account3 a account:Account ;
+    mu:uuid "account-3-uuid" ;
+    schema:userName "lena_martin789" ;
+    schema:password "yetanotherpassword" ;
+    schema:email "lenalena@mail.com" ;
+    schema:creationDate "2021-02-10"^^xsd:date ;
+    schema:hasRole "reader" .
+
+account:account4 a account:Account ;
+    mu:uuid "account-4-uuid" ;
+    schema:userName "harper_lee_team" ;
+    schema:password "mockingbird" ;
+    schema:email "harper.lee.team@mail.com" ;
+    schema:creationDate "2017-05-30"^^xsd:date ;
+    schema:hasRole "author" .

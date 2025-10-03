@@ -22,5 +22,22 @@
 ;;   :resource-base (s-url "http://webcat.tmp.semte.ch/datasets/")
 ;;   :on-path "datasets")
 
+(define-resource book ()
+  :class (s-prefix "bf:Work")
+  :properties `((:title :string ,(s-prefix "bf:title"))
+                (:genre :string ,(s-prefix "schema:genre"))
+                (:pages :integer ,(s-prefix "schema:pages"))
+                (:language :string ,(s-prefix "schema:language"))
+                (:publisher :string ,(s-prefix "schema:publisher"))
+                (:date :date ,(s-prefix "bf:date"))
+                (:isbn :string ,(s-prefix "bf:isbn"))
+                (:averageRating :float ,(s-prefix "schema:averageRating")))
+  :has-many `((reviews :via ,(s-prefix "schema:review")
+                       :as "reviews")
+             (authors :via ,(s-prefix "schema:author")
+                       :as "authors"))
+  :resource-base (s-url "http://example.org/bookreview/book/")
+  :on-path "books")
+
 ;; reading in the domain.json
 (read-domain-file "domain.json")
