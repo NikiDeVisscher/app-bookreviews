@@ -1,0 +1,73 @@
+PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
+PREFIX book: <http://example.org/bookreview/book/>
+PREFIX author: <http://example.org/bookreview/author/>
+PREFIX reader: <http://example.org/bookreview/reader/>
+PREFIX review: <http://example.org/bookreview/review/>
+PREFIX account: <http://example.org/bookreview/account/>
+
+DELETE {
+    GRAPH <http://mu.semte.ch/graphs/public> {
+        book:book1 mu:uuid ?old1 .
+        book:book2 mu:uuid ?old2 .
+        book:book3 mu:uuid ?old3 .
+        author:author1 mu:uuid ?old4 .
+        author:author2 mu:uuid ?old5 .
+        author:author3 mu:uuid ?old6 .
+        reader:reader1 mu:uuid ?old7 .
+        reader:reader2 mu:uuid ?old8 .
+        reader:reader3 mu:uuid ?old9 .
+        review:review1 mu:uuid ?old10 .
+        review:review2 mu:uuid ?old11 .
+        review:review3 mu:uuid ?old12 .
+        review:review4 mu:uuid ?old13 .
+        review:review5 mu:uuid ?old14 .
+        account:account1 mu:uuid ?old15 .
+        account:account2 mu:uuid ?old16 .
+        account:account3 mu:uuid ?old17 .
+        account:account4 mu:uuid ?old18 .
+  }
+}
+INSERT {
+    GRAPH <http://mu.semte.ch/graphs/public> {
+        book:book1 mu:uuid "e8ac6998-87e0-4db7-8a23-caa0c9c5ce8d" .
+        book:book2 mu:uuid "bd241efb-41bb-441d-99a3-9a78b5cfd2c0" .
+        book:book3 mu:uuid "17b773ac-c5c0-4c26-ab36-b013e246878b" .
+        author:author1 mu:uuid "221914f1-1d8b-4d8e-b587-b1fdbdf13c5d" .
+        author:author2 mu:uuid "42b3aa3d-e9db-45f7-b425-1bace771869e" .
+        author:author3 mu:uuid "81f5cccf-cdfa-4bfe-ad9e-6c7a0d2dce51" .
+        reader:reader1 mu:uuid "f6f4a83e-9dfb-4b0c-9636-2dc8406b933c" .
+        reader:reader2 mu:uuid "f76fa74d-c8d7-4697-95d1-e63e08a70c19" .
+        reader:reader3 mu:uuid "ff5bc71e-851b-4592-ad69-d47d49526260" .
+        review:review1 mu:uuid "c5bf21f9-6772-490b-8ee7-81a1b8797dfb" .
+        review:review2 mu:uuid "a5bfbff9-9b2c-40a2-953e-011a19319d88" .
+        review:review3 mu:uuid "fe02c0af-c974-4145-aa25-2dbe8a057c62" .
+        review:review4 mu:uuid "b62831f2-c875-4d0c-95be-d5405c11266d" .
+        review:review5 mu:uuid "f5edc2b6-1f70-464d-bf4f-3c79a833f327" .
+        account:account1 mu:uuid "11769e74-f8ca-46a7-aaf3-f13217f5fa7e" .
+        account:account2 mu:uuid "0529b1b6-c495-4bce-a128-576f48b2ee80" .
+        account:account3 mu:uuid "b8e398c3-d0ad-4956-8d39-2071c0b793c7" .
+        account:account4 mu:uuid "1e5c10e1-4255-4d15-a18d-79ceee0caaee" .
+  }
+}
+WHERE {
+    GRAPH <http://mu.semte.ch/graphs/public> {
+        book:book1 mu:uuid ?old1 .
+        book:book2 mu:uuid ?old2 .
+        book:book3 mu:uuid ?old3 .
+        author:author1 mu:uuid ?old4 .
+        author:author2 mu:uuid ?old5 .
+        author:author3 mu:uuid ?old6 .
+        reader:reader1 mu:uuid ?old7 .
+        reader:reader2 mu:uuid ?old8 .
+        reader:reader3 mu:uuid ?old9 .
+        review:review1 mu:uuid ?old10 .
+        review:review2 mu:uuid ?old11 .
+        review:review3 mu:uuid ?old12 .
+        review:review4 mu:uuid ?old13 .
+        review:review5 mu:uuid ?old14 .
+        account:account1 mu:uuid ?old15 .
+        account:account2 mu:uuid ?old16 .
+        account:account3 mu:uuid ?old17 .
+        account:account4 mu:uuid ?old18 .
+  }
+}
