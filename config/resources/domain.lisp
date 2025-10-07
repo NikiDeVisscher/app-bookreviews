@@ -37,7 +37,7 @@
              (authors :via ,(s-prefix "schema:author")
                        :as "authors"))
   :resource-base (s-url "http://example.org/bookreview/book/")
-  :on-path "books")
+  :on-path "book")
 
 ;; reading in the domain.json
 (read-domain-file "domain.json")

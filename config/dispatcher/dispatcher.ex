@@ -22,7 +22,7 @@ defmodule Dispatcher do
   # this file.
 
   match "/books/*path", @any do
-    Proxy.forward conn, path, "http://resource/books/"
+    Proxy.forward conn, path, "http://resource/book/"
   end
 
   #match "/*_", %{ layer: :not_found } do
