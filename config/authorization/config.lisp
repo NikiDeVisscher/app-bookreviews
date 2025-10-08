@@ -52,7 +52,8 @@
 ;; indexes.
 
 (define-graph public ("http://mu.semte.ch/graphs/public")
-  ("bf:Work" -> _))
+  ("bf:Work" -> _)
+  ("schema:Person" -> _))
 
 ;; Example:
 ;; (define-graph company ("http://mu.semte.ch/graphs/companies/")

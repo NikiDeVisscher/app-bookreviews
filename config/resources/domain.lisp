@@ -39,5 +39,16 @@
   :resource-base (s-url "http://example.org/bookreview/book/")
   :on-path "book")
 
+(define-resource person ()
+  :class (s-prefix "schema:Person")
+  :properties `((:name :string ,(s-prefix "schema:name")))
+  :has-many `((accounts :via ,(s-prefix "schema:account")
+                        :as "accounts")
+              (authored-books :via ,(s-prefix "schema:author")
+                        :inverse t
+                        :as "authored-books"))
+  :resource-base (s-url "http://example.org/bookreview/person/")
+  :on-path "person")
+
 ;; reading in the domain.json
 (read-domain-file "domain.json")
