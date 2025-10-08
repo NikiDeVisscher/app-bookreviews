@@ -11,15 +11,16 @@ defmodule Dispatcher do
 
   define_layers [ :static, :services, :fall_back, :not_found ]
 
-  # In order to forward the 'themes' resource to the
-  # resource service, use the following forward rule:
-  #
-  # match "/themes/*path", @json do
-  #   Proxy.forward conn, path, "http://resource/themes/"
-  # end
-  #
-  # Run `docker-compose restart dispatcher` after updating
-  # this file.
+  options "/*_path", @any do
+    conn
+    |> Plug.Conn.put_resp_header( "access-control-allow-headers", "content-type,accept" )
+    |> Plug.Conn.put_resp_header( "access-control-allow-methods", "*" )
+    |> send_resp( 200, "{ \"message\": \"ok\" }" )
+  end
+
+  get "/favicon.ico", @static do
+    send_resp( conn, 404, "" )
+  end
 
   match "/books/*path", @any do
     Proxy.forward conn, path, "http://resource/book/"

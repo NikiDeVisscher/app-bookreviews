@@ -39,6 +39,7 @@
   :ext "http://mu.semte.ch/vocabularies/ext/"
   ;; Custom prefix URIs here, prefix casing is ignored
   :bf "http://id.loc.gov/ontologies/bibframe/"
+  :schema "http://schema.org/"
   )
 
 
