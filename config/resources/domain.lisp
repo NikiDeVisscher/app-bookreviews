@@ -34,13 +34,13 @@
                 (:averageRating :float ,(s-prefix "schema:averageRating")))
   :has-many `((review :via ,(s-prefix "schema:review")
                        :as "reviews")
-             (person :via ,(s-prefix "schema:Person")
+             (author :via ,(s-prefix "schema:author")
                         :as "authors"))
   :resource-base (s-url "http://example.org/bookreview/book/")
   :features '(include-uri)
   :on-path "book")
 
-(define-resource person ()
+(define-resource author ()
   :class (s-prefix "schema:Person")
   :properties `((:name :string ,(s-prefix "schema:name")))
   :has-many `((account :via ,(s-prefix "schema:account")
@@ -50,7 +50,7 @@
                         :as "books"))
   :resource-base (s-url "http://example.org/bookreview/author/")
   :features '(include-uri)
-  :on-path "person")
+  :on-path "author")
 
 ;; reading in the domain.json
 (read-domain-file "domain.json")
