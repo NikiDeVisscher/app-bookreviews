@@ -45,7 +45,7 @@
   :properties `((:name :string ,(s-prefix "schema:name")))
   :has-many `((account :via ,(s-prefix "schema:account")
                         :as "accounts")
-              (book :via ,(s-prefix "schema:Person")
+              (book :via ,(s-prefix "bf:Work")
                         :inverse t
                         :as "books"))
   :resource-base (s-url "http://example.org/bookreview/author/")
