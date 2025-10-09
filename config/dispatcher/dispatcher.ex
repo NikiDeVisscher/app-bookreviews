@@ -11,6 +11,10 @@ defmodule Dispatcher do
 
   define_layers [ :static, :services, :fall_back, :not_found ]
 
+  options "*_path" do
+    send_resp( conn, 200, "Option calls are accepted by default" )
+  end
+
   match "/books/*path", @any do
     IO.puts "INFO: Routing to books"
     Proxy.forward conn, path, "http://resource/books/"
