@@ -39,6 +39,7 @@
   :ext "http://mu.semte.ch/vocabularies/ext/"
   ;; Custom prefix URIs here, prefix casing is ignored
   :bf "http://id.loc.gov/ontologies/bibframe/"
+  :schema "http://schema.org/"
   )
 
 
@@ -52,7 +53,9 @@
 ;; indexes.
 
 (define-graph public ("http://mu.semte.ch/graphs/public")
-  ("bf:Work" -> _))
+  ("bf:Work" -> _)
+  ("schema:Person" -> _)
+  ("schema:author" -> _))
 
 ;; Example:
 ;; (define-graph company ("http://mu.semte.ch/graphs/companies/")
