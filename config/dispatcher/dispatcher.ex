@@ -11,31 +11,14 @@ defmodule Dispatcher do
 
   define_layers [ :static, :services, :fall_back, :not_found ]
 
-  options "/*_path", @any do
-    conn
-    |> Plug.Conn.put_resp_header( "access-control-allow-headers", "content-type,accept" )
-    |> Plug.Conn.put_resp_header( "access-control-allow-methods", "*" )
-    |> send_resp( 200, "{ \"message\": \"ok\" }" )
-  end
-
   match "/books/*path", @any do
     IO.puts "INFO: Routing to books"
-    Proxy.forward conn, path, "http://resource/book/"
+    Proxy.forward conn, path, "http://resource/books/"
   end
 
   match "/authors/*path", @any do
     IO.puts "INFO: Routing to authors"
-    Proxy.forward conn, path, "http://resource/author/"
-  end
-
-  match "/book/*path", @any do
-    IO.puts "INFO: Routing to book"
-    Proxy.forward conn, path, "http://resource/book/"
-  end
-
-  match "/author/*path", @any do
-    IO.puts "INFO: Routing to author"
-    Proxy.forward conn, path, "http://resource/author/"
+    Proxy.forward conn, path, "http://resource/authors/"
   end
 
   match "/*_", %{ layer: :not_found } do

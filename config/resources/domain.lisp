@@ -38,7 +38,7 @@
                         :as "authors"))
   :resource-base (s-url "http://example.org/bookreview/book/")
   :features '(include-uri)
-  :on-path "book")
+  :on-path "books")
 
 (define-resource author ()
   :class (s-prefix "schema:Person")
@@ -50,7 +50,7 @@
                         :as "books"))
   :resource-base (s-url "http://example.org/bookreview/author/")
   :features '(include-uri)
-  :on-path "author")
+  :on-path "authors")
 
 ;; reading in the domain.json
 (read-domain-file "domain.json")
