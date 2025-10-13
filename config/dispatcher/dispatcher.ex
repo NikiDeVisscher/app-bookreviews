@@ -11,6 +11,13 @@ defmodule Dispatcher do
 
   define_layers [ :static, :services, :fall_back, :not_found ]
 
+  options "/*path" do
+    conn
+    |> Plug.Conn.put_resp_header( "access-control-allow-headers", "content-type,accept" )
+    |> Plug.Conn.put_resp_header( "access-control-allow-methods", "*" )
+    |> send_resp( 200, "{ \"message\": \"ok\" }" )
+  end
+
   match "/books/*path", @any do
     IO.puts "INFO: Routing to books"
     Proxy.forward conn, path, "http://resource/books/"
