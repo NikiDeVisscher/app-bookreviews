@@ -63,5 +63,19 @@
   :features '(include-uri)
   :on-path "accounts")
 
+(define-resource review ()
+  :class (s-prefix "schema:Review")
+  :properties `((:reviewContent :string ,(s-prefix "schema:reviewContent"))
+                (:reviewRating :integer ,(s-prefix "schema:reviewRating"))
+                (:dateCreated :date ,(s-prefix "schema:dateCreated")))
+  :has-one `((book :via ,(s-prefix "schema:about")
+                       :inverse t
+                       :as "book")
+             (author :via ,(s-prefix "schema:author")
+                        :as "author"))
+  :resource-base (s-url "http://example.org/bookreview/review/")
+  :features '(include-uri)
+  :on-path "reviews")
+
 ;; reading in the domain.json
 (read-domain-file "domain.json")
