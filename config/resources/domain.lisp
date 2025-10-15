@@ -43,7 +43,7 @@
 (define-resource author ()
   :class (s-prefix "schema:Person")
   :properties `((:name :string ,(s-prefix "schema:name")))
-  :has-many `((account :via ,(s-prefix "schema:account")
+  :has-many `((account :via ,(s-prefix "account:Account")
                         :as "accounts")
               (book :via ,(s-prefix "bf:Work")
                         :inverse t
