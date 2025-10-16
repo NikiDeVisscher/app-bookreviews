@@ -32,7 +32,8 @@
                 (:date :date ,(s-prefix "bf:date"))
                 (:isbn :string ,(s-prefix "bf:isbn"))
                 (:averageRating :float ,(s-prefix "schema:averageRating")))
-  :has-many `((review :via ,(s-prefix "schema:review")
+  :has-many `((review :via ,(s-prefix "schema:about")
+                       :inverse t
                        :as "reviews")
              (author :via ,(s-prefix "schema:author")
                         :as "authors"))
@@ -43,7 +44,7 @@
 (define-resource author ()
   :class (s-prefix "schema:Person")
   :properties `((:name :string ,(s-prefix "schema:name")))
-  :has-many `((account :via ,(s-prefix "schema:account")
+  :has-many `((account :via ,(s-prefix "account:Account")
                         :as "accounts")
               (book :via ,(s-prefix "bf:Work")
                         :inverse t
@@ -51,6 +52,31 @@
   :resource-base (s-url "http://example.org/bookreview/author/")
   :features '(include-uri)
   :on-path "authors")
+
+(define-resource account ()
+  :class (s-prefix "account:Account")
+  :properties `((:userName :string ,(s-prefix "schema:userName"))
+                (:password :string ,(s-prefix "schema:password"))
+                (:email :string ,(s-prefix "schema:email"))
+                (:creationDate :date ,(s-prefix "schema:creationDate"))
+                (:hasRole :string ,(s-prefix "schema:hasRole")))
+  :resource-base (s-url "http://example.org/bookreview/account/")
+  :features '(include-uri)
+  :on-path "accounts")
+
+(define-resource review ()
+  :class (s-prefix "schema:Review")
+  :properties `((:reviewContent :string ,(s-prefix "schema:reviewContent"))
+                (:reviewRating :integer ,(s-prefix "schema:reviewRating"))
+                (:dateCreated :date ,(s-prefix "schema:dateCreated")))
+  :has-one `((book :via ,(s-prefix "schema:about")
+                       :inverse t
+                       :as "book")
+             (author :via ,(s-prefix "schema:author")
+                        :as "author"))
+  :resource-base (s-url "http://example.org/bookreview/review/")
+  :features '(include-uri)
+  :on-path "reviews")
 
 ;; reading in the domain.json
 (read-domain-file "domain.json")
