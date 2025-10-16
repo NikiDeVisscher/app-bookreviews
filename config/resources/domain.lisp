@@ -32,7 +32,8 @@
                 (:date :date ,(s-prefix "bf:date"))
                 (:isbn :string ,(s-prefix "bf:isbn"))
                 (:averageRating :float ,(s-prefix "schema:averageRating")))
-  :has-many `((review :via ,(s-prefix "schema:review")
+  :has-many `((review :via ,(s-prefix "schema:about")
+                       :inverse t
                        :as "reviews")
              (author :via ,(s-prefix "schema:author")
                         :as "authors"))
