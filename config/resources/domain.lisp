@@ -70,7 +70,6 @@
                 (:reviewRating :integer ,(s-prefix "schema:reviewRating"))
                 (:dateCreated :date ,(s-prefix "schema:dateCreated")))
   :has-one `((book :via ,(s-prefix "schema:about")
-                       :inverse t
                        :as "book")
              (author :via ,(s-prefix "schema:author")
                         :as "author"))
