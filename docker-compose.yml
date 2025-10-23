@@ -29,19 +29,9 @@ services:
     environment:
       NODE_ENV: "development"
     ports:
-      - 8888:80
+      - "8085:3000"
     volumes:
       - ./config/rating-service:/app/
-
-  #rating-service:
-  #  image: semtech/mu-javascript-template
-  #  volumes:
-  #    - ./config/rating-service:/app
-  #  environment:
-  #    MU_APPLICATION_GRAPH: "http://mu.semte.ch/graphs/public"
-  #    NODE_ENV: "development"
-  #  depends_on:
-  #    - resource
 
   resource:
     image: semtech/mu-cl-resources:1.26.0
