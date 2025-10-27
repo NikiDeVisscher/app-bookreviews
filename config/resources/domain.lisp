@@ -77,5 +77,17 @@
   :features '(include-uri)
   :on-path "reviews")
 
+(define-resource reader ()
+  :class (s-prefix "schema:Person")
+  :properties `((:name :string ,(s-prefix "schema:name")))
+  :has-one `((account :via ,(s-prefix "account:Account")
+                        :as "account"))
+  :has-many `((review :via ,(s-prefix "schema:author")
+                        :inverse t
+                        :as "reviews"))
+  :resource-base (s-url "http://example.org/bookreview/reader/")
+  :features '(include-uri)
+  :on-path "readers")
+
 ;; reading in the domain.json
 (read-domain-file "domain.json")
