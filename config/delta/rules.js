@@ -2,7 +2,7 @@ export default [
   {
     match: {
       predicate: {
-        value: "http://schema.org/about",
+        value: "http://schema.org/reviewRating",
       },
     },
     callback: {
