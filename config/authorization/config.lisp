@@ -57,7 +57,8 @@
   ("bf:Work" -> _)
   ("schema:Person" -> _)
   ("schema:author" -> _)
-  ("account:Account" -> _))
+  ("account:Account" -> _)
+  ("schema:Review" -> _))
 
 ;; Example:
 ;; (define-graph company ("http://mu.semte.ch/graphs/companies/")
