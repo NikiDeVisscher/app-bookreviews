@@ -33,6 +33,14 @@ services:
     volumes:
       - ./config/rating-service:/app/
 
+  registration:
+    image: semtech/mu-registration-service:2.8.0
+    links:
+      - database:database
+    environment:
+      USERS_GRAPH: http://mu.semte.ch/graphs/public
+      SESSIONS_GRAPH: http://mu.semte.ch/graphs/public
+
   resource:
     image: semtech/mu-cl-resources:1.26.0
     volumes:
