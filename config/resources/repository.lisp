@@ -34,3 +34,4 @@
 (add-prefix "ext" "http://mu.semte.ch/vocabularies/ext/")
 (add-prefix "bf" "http://id.loc.gov/ontologies/bibframe/")
 (add-prefix "schema" "http://schema.org/")
+(add-prefix "account" "http://example.org/bookreview/account/")

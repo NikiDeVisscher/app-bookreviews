@@ -40,6 +40,7 @@
   ;; Custom prefix URIs here, prefix casing is ignored
   :bf "http://id.loc.gov/ontologies/bibframe/"
   :schema "http://schema.org/"
+  :account "http://example.org/bookreview/account/"
   )
 
 
@@ -55,7 +56,8 @@
 (define-graph public ("http://mu.semte.ch/graphs/public")
   ("bf:Work" -> _)
   ("schema:Person" -> _)
-  ("schema:author" -> _))
+  ("schema:author" -> _)
+  ("account:Account" -> _))
 
 ;; Example:
 ;; (define-graph company ("http://mu.semte.ch/graphs/companies/")

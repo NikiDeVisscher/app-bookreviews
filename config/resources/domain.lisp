@@ -43,7 +43,7 @@
 (define-resource author ()
   :class (s-prefix "schema:Person")
   :properties `((:name :string ,(s-prefix "schema:name")))
-  :has-many `((account :via ,(s-prefix "schema:account")
+  :has-many `((account :via ,(s-prefix "account:Account")
                         :as "accounts")
               (book :via ,(s-prefix "bf:Work")
                         :inverse t
@@ -51,6 +51,17 @@
   :resource-base (s-url "http://example.org/bookreview/author/")
   :features '(include-uri)
   :on-path "authors")
+
+(define-resource account ()
+  :class (s-prefix "account:Account")
+  :properties `((:userName :string ,(s-prefix "schema:userName"))
+                (:password :string ,(s-prefix "schema:password"))
+                (:email :string ,(s-prefix "schema:email"))
+                (:creationDate :date ,(s-prefix "schema:creationDate"))
+                (:hasRole :string ,(s-prefix "schema:hasRole")))
+  :resource-base (s-url "http://example.org/bookreview/account/")
+  :features '(include-uri)
+  :on-path "accounts")
 
 ;; reading in the domain.json
 (read-domain-file "domain.json")
