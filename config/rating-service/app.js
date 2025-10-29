@@ -1,7 +1,7 @@
 import bodyParser from "body-parser";
-import { app } from "mu";
+import { app, query, update, sparqlEscapeUri, errorHandler } from "mu";
 
-app.use(bodyParser.json({ type: "*/*" }));
+app.use(bodyParser.json({ type: "*/*", limit: "50mb" }));
 
 app.post("/delta", async (req, res) => {
   console.log("Received delta", JSON.stringify(req.body, null, 2));
@@ -17,123 +17,107 @@ app.post("/delta", async (req, res) => {
     t => t.predicate.value === "http://schema.org/about"
   );
 
-  let reviewUri = null;
-  let bookId = null;
-
   for (const triple of insertsTriples) {
-    reviewUri = triple.subject.value;
-    let reviewId = reviewUri.split("/").pop();
-    let bookId = await fetchBookId(reviewId);
-    if (bookId) {
-      await updateRating(bookId);
+    const reviewUri = triple.subject.value;
+    const bookUri = await findBookByReview(reviewUri);
+    if (bookUri) {
+      await updateRating(bookUri);
     }
   }
 
   for (const triple of deletesTriples) {
     if (!insertsTriples.find(t => t.subject.value === triple.subject.value)) {
-      reviewUri = triple.subject.value;
-      let bookUri = triple.object.value;
-      bookId = bookUri.split("/").pop();
-      await updateRating(bookId);
+      const bookUri = triple.object.value;
+      await updateRating(bookUri);
     }
   }
 
   res.sendStatus(200);
 });
 
-/** Fetches the linked book and reads the id. */
-async function fetchBookId(reviewId) {
-  let bookId = null;
-
-  try {
-    const bookUriResponse = await fetch(
-      `http://resource/reviews/${reviewId}/book`
-    );
-
-    if (!bookUriResponse.ok) {
-      console.error(
-        `Failed to fetch book for review ${reviewId}:`,
-        bookUriResponse.status,
-        bookUriResponse.statusText
-      );
-      return false;
-    }
-
-    const bookUriJson = await bookUriResponse.json();
-
-    if (!bookUriJson.data || !bookUriJson.data.attributes.uri) {
-      console.error(
-        `Invalid response for review ${reviewId}:`,
-        JSON.stringify(bookUriJson, null, 2)
-      );
-      return false;
-    }
-
-    const bookUri = bookUriJson.data.attributes.uri;
-    bookId = bookUri.split("/").pop();
-  } catch (error) {
-    console.error(`Error fetching book for review ${reviewId}:`, error);
-    return false;
-  }
-
-  return bookId;
+/** Finds the uri of the book linked to a given review. */
+async function findBookByReview(reviewUri) {
+  const q = `
+    PREFIX schema: <http://schema.org/>
+    PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
+    SELECT ?book WHERE {
+      GRAPH <http://mu.semte.ch/graphs/public> {
+        ${sparqlEscapeUri(reviewUri)} schema:about ?book .
+      }
+    } LIMIT 1
+  `;
+  const result = await query(q);
+  return result.results.bindings[0]?.book?.value || null;
 }
 
-/** Fetches the ratings of all reviews for a book, calculates the average and patches the new average rating. */
-async function updateRating(bookId) {
+/** Gets all ratings for reviews about a given book. */
+async function getRatingsForBook(bookUri) {
+  const escapedBookUri = sparqlEscapeUri(bookUri);
+  const q = `
+    PREFIX schema: <http://schema.org/>
+    PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
+    SELECT ?rating WHERE {
+      GRAPH <http://mu.semte.ch/graphs/public> {
+        ?review schema:about ${escapedBookUri} ;
+                schema:reviewRating ?rating .
+      }
+    }
+  `;
+  const result = await query(q);
+  return result.results.bindings
+    .map(b => parseFloat(b.rating.value))
+    .filter(v => !isNaN(v));
+}
+
+/** Calculates average and update the book's average rating. */
+async function updateRating(bookUri) {
   try {
-    console.log(`Recalculating average for book ${bookId}`);
-
-    const reviewsResponse = await fetch(
-      `http://resource/books/${bookId}/reviews`
-    );
-
-    if (!reviewsResponse.ok) {
-      console.error(
-        `Failed to fetch reviews for book ${bookId}:`,
-        reviewsResponse.status,
-        reviewsResponse.statusText
-      );
-      return false;
-    }
-
-    const reviewsJson = await reviewsResponse.json();
-
-    if (!reviewsJson.data || !Array.isArray(reviewsJson.data)) {
-      console.error(
-        `Invalid response for book ${bookId}:`,
-        JSON.stringify(reviewsJson, null, 2)
-      );
-      return false;
-    }
-
-    const ratings = reviewsJson.data
-      .map(r => r.attributes["reviewrating"])
-      .filter(v => typeof v === "number");
-
+    const ratings = await getRatingsForBook(bookUri);
     const avg =
       ratings.length > 0
         ? ratings.reduce((a, b) => a + b, 0) / ratings.length
         : null;
 
-    await fetch(`http://resource/books/${bookId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/vnd.api+json" },
-      body: JSON.stringify({
-        data: {
-          type: "books",
-          id: bookId,
-          attributes: { averagerating: avg },
-        },
-      }),
-    });
+    console.log(
+      `Recalculating average for book ${bookUri}: ${avg ?? "no ratings"}`
+    );
 
-    console.log(`Updated book ${bookId} average rating to ${avg}`);
+    const escapedBookUri = sparqlEscapeUri(bookUri);
+    const deleteOldAvgQuery = `
+      PREFIX schema: <http://schema.org/>
+      DELETE {
+        GRAPH <http://mu.semte.ch/graphs/public> {
+          ${escapedBookUri} schema:averageRating ?oldAvg .
+        }
+      }
+      WHERE {
+        GRAPH <http://mu.semte.ch/graphs/public> {
+          ${escapedBookUri} schema:averageRating ?oldAvg .
+        }
+      }
+    `;
+
+    await update(deleteOldAvgQuery);
+
+    if (avg !== null) {
+      const newAvgQuery = `
+        PREFIX schema: <http://schema.org/>
+        INSERT DATA {
+          GRAPH <http://mu.semte.ch/graphs/public> {
+            ${escapedBookUri} schema:averageRating "${avg}"^^<http://www.w3.org/2001/XMLSchema#decimal> .
+          }
+        }
+      `;
+      await update(newAvgQuery);
+    }
+
+    console.log(`Updated book ${bookUri} average rating to ${avg}`);
   } catch (error) {
-    console.error(`Error processing review for book ${bookId}:`, error);
+    const errorMessage = `Error updating average for book ${bookUri}: ${error.message}`;
+    new Error(errorMessage);
+    console.error(errorMessage);
   }
-
-  return true;
 }
 
+app.use(errorHandler);
 app.listen(3000, () => console.log("rating-service listening on port 3000"));
