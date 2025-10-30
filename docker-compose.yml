@@ -24,6 +24,9 @@ services:
     logging: *default-logging
 
   # Your extra services here
+  rating-service:
+    image: books-rating-service:0.1.0
+  
   resource:
     image: semtech/mu-cl-resources:1.26.0
     volumes:

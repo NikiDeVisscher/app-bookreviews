@@ -1,10 +1,12 @@
 export default [
   {
     match: {
-      subject: {},
+      predicate: {
+        value: "http://schema.org/reviewRating",
+      },
     },
     callback: {
-      url: "http://resource/.mu/delta",
+      url: "http://rating-service/delta",
       method: "POST",
     },
     options: {
@@ -13,5 +15,5 @@ export default [
       foldEffectiveChanges: true,
       ignoreFromSelf: true,
     },
-  }
+  },
 ];
