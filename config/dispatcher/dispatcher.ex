@@ -28,11 +28,6 @@ defmodule Dispatcher do
     Proxy.forward conn, path, "http://resource/authors/"
   end
 
-  match "/accounts/*path", @any do
-    IO.puts "INFO: Routing to accounts"
-    Proxy.forward conn, path, "http://resource/accounts/"
-  end
-
   match "/reviews/*path", @any do
     IO.puts "INFO: Routing to reviews"
     Proxy.forward conn, path, "http://resource/reviews/"
@@ -44,6 +39,7 @@ defmodule Dispatcher do
   end
 
   match "/accounts/*path", @any do
+    IO.puts "INFO: Routing to registration service"
     Proxy.forward conn, path, "http://registration/accounts/"
   end
 
