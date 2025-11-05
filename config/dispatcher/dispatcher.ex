@@ -38,9 +38,14 @@ defmodule Dispatcher do
     Proxy.forward conn, path, "http://login/sessions/"
   end
 
-  match "/accounts/*path", @any do
+  match "/register-account/*path", @any do
     IO.puts "INFO: Routing to registration service"
     Proxy.forward conn, path, "http://registration/accounts/"
+  end
+
+  match "/accounts/*path", @any do
+    IO.puts "INFO: Routing to accounts"
+    Proxy.forward conn, path, "http://resource/accounts/"
   end
 
   match "/*_", %{ layer: :not_found } do
