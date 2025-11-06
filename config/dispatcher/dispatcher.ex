@@ -38,13 +38,33 @@ defmodule Dispatcher do
     Proxy.forward conn, path, "http://login/sessions/"
   end
 
-  match "/register-account/*path", @any do
+  put "/accounts/*path", @any do
     IO.puts "INFO: Routing to registration service"
     Proxy.forward conn, path, "http://registration/accounts/"
   end
 
-  match "/accounts/*path", @any do
-    IO.puts "INFO: Routing to accounts"
+  post "/accounts/*path", @any do
+    IO.puts "INFO: Routing to registration service"
+    Proxy.forward conn, path, "http://registration/accounts/"
+  end
+
+  delete "/accounts/*path", @any do
+    IO.puts "INFO: Routing to registration service"
+    Proxy.forward conn, path, "http://registration/accounts/"
+  end
+
+  patch "/accounts/*path", @any do
+    IO.puts "INFO: Routing to registration service"
+    Proxy.forward conn, path, "http://registration/accounts/"
+  end
+
+  options "/accounts/*path", @any do
+    IO.puts "INFO: Routing to registration service"
+    Proxy.forward conn, path, "http://registration/accounts/"
+  end
+
+  get "/accounts/*path", @any do
+    IO.puts "INFO: Routing to accounts resource"
     Proxy.forward conn, path, "http://resource/accounts/"
   end
 
