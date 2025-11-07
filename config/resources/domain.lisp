@@ -63,11 +63,11 @@
                         :as "accounts"))
   :resource-base (s-url "http://example.org/bookreview/person/")
   :features '(include-uri)
-  :on-path "persons")
+  :on-path "people")
 
 (define-resource account ()
   :class (s-prefix "foaf:OnlineAccount")
-  :properties `((:accountName :string ,(s-prefix "foaf:accountName"))
+  :properties `((:nickname :string ,(s-prefix "foaf:accountName"))
                 (:password :string ,(s-prefix "account:password"))
                 (:salt :string ,(s-prefix "account:salt"))
                 (:status :Resource ,(s-prefix "account:status"))
