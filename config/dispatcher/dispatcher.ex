@@ -68,6 +68,11 @@ defmodule Dispatcher do
     Proxy.forward conn, path, "http://resource/accounts/"
   end
 
+  patch "/role/*path", @any do
+    IO.puts "INFO: Routing to accounts resource for role assignment"
+    Proxy.forward conn, path, "http://resource/accounts/"
+  end
+
   match "/people/*path", @any do
     IO.puts "INFO: Routing to persons"
     Proxy.forward conn, path, "http://resource/people/"

@@ -41,6 +41,7 @@
   :bf "http://id.loc.gov/ontologies/bibframe/"
   :schema "http://schema.org/"
   :account "http://example.org/bookreview/account/"
+  :foaf "http://xmlns.com/foaf/0.1/"
   )
 
 
@@ -58,7 +59,9 @@
   ("schema:Person" -> _)
   ("schema:author" -> _)
   ("account:Account" -> _)
-  ("schema:Review" -> _))
+  ("schema:Review" -> _)
+  ("foaf:Person" -> _)
+  ("foaf:OnlineAccount" -> _))
 
 ;; Example:
 ;; (define-graph company ("http://mu.semte.ch/graphs/companies/")

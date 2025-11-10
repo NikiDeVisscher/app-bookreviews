@@ -72,7 +72,8 @@
                 (:salt :string ,(s-prefix "account:salt"))
                 (:status :Resource ,(s-prefix "account:status"))
                 (:created :dateTime ,(s-prefix "dct:created"))
-                (:modified :dateTime ,(s-prefix "dct:modified")))
+                (:modified :dateTime ,(s-prefix "dct:modified"))
+                (:role :string ,(s-prefix "schema:roleName")))
   :has-one `((person :via ,(s-prefix "foaf:account")
                        :inverse t
                        :as "person"))
