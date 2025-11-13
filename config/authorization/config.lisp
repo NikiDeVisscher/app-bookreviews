@@ -61,7 +61,8 @@
   ("account:Account" -> _)
   ("schema:Review" -> _)
   ("foaf:Person" -> _)
-  ("foaf:OnlineAccount" -> _))
+  ("foaf:OnlineAccount" -> _)
+  ("session:account" -> _))
 
 ;; Example:
 ;; (define-graph company ("http://mu.semte.ch/graphs/companies/")
