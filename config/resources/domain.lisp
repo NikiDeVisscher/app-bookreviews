@@ -74,10 +74,13 @@
                 (:created :dateTime ,(s-prefix "dct:created"))
                 (:modified :dateTime ,(s-prefix "dct:modified"))
                 (:role :string ,(s-prefix "schema:roleName")))
+  :has-many `((review :via ,(s-prefix "schema:author")
+                       :inverse t
+                       :as "reviews"))
   :has-one `((person :via ,(s-prefix "foaf:account")
                        :inverse t
                        :as "person"))
-  :resource-base (s-url "http://example.org/bookreview/account/")
+  :resource-base (s-url "http://mu.semte.ch/services/registration-service/accounts/")
   :features '(include-uri)
   :on-path "accounts")
 
@@ -88,8 +91,8 @@
                 (:dateCreated :date ,(s-prefix "schema:dateCreated")))
   :has-one `((book :via ,(s-prefix "schema:about")
                        :as "book")
-             (author :via ,(s-prefix "schema:author")
-                        :as "author"))
+             (account :via ,(s-prefix "schema:author")
+                        :as "account"))
   :resource-base (s-url "http://example.org/bookreview/review/")
   :features '(include-uri)
   :on-path "reviews")
