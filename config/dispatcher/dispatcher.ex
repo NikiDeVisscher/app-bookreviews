@@ -28,14 +28,54 @@ defmodule Dispatcher do
     Proxy.forward conn, path, "http://resource/authors/"
   end
 
-  match "/accounts/*path", @any do
-    IO.puts "INFO: Routing to accounts"
-    Proxy.forward conn, path, "http://resource/accounts/"
-  end
-
   match "/reviews/*path", @any do
     IO.puts "INFO: Routing to reviews"
     Proxy.forward conn, path, "http://resource/reviews/"
+  end
+
+  match "/sessions/*path", @any do
+    IO.puts "INFO: Routing to login service"
+    Proxy.forward conn, path, "http://login/sessions/"
+  end
+
+  put "/accounts/*path", @any do
+    IO.puts "INFO: Routing to registration service"
+    Proxy.forward conn, path, "http://registration/accounts/"
+  end
+
+  post "/accounts/*path", @any do
+    IO.puts "INFO: Routing to registration service"
+    Proxy.forward conn, path, "http://registration/accounts/"
+  end
+
+  delete "/accounts/*path", @any do
+    IO.puts "INFO: Routing to registration service"
+    Proxy.forward conn, path, "http://registration/accounts/"
+  end
+
+  patch "/accounts/*path", @any do
+    IO.puts "INFO: Routing to registration service"
+    Proxy.forward conn, path, "http://registration/accounts/"
+  end
+
+  options "/accounts/*path", @any do
+    IO.puts "INFO: Routing to registration service"
+    Proxy.forward conn, path, "http://registration/accounts/"
+  end
+
+  get "/accounts/*path", @any do
+    IO.puts "INFO: Routing to accounts resource"
+    Proxy.forward conn, path, "http://resource/accounts/"
+  end
+
+  patch "/role/*path", @any do
+    IO.puts "INFO: Routing to accounts resource for role assignment"
+    Proxy.forward conn, path, "http://resource/accounts/"
+  end
+
+  match "/people/*path", @any do
+    IO.puts "INFO: Routing to persons"
+    Proxy.forward conn, path, "http://resource/people/"
   end
 
   match "/*_", %{ layer: :not_found } do
