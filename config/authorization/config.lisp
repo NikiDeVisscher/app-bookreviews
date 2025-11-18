@@ -54,20 +54,41 @@
 ;; specifications can be folded too.  This could help when building
 ;; indexes.
 
-(define-graph public ("http://mu.semte.ch/graphs/public")
+;;(define-graph public ("http://mu.semte.ch/graphs/public")
+;;  ("bf:Work" -> _)
+;;  ("schema:Person" -> _)
+;;  ("schema:author" -> _)
+;;  ("schema:Review" -> _)
+;;  ("foaf:Person" -> _)
+;;  ("foaf:OnlineAccount" -> _)
+;;  ("account:Account" -> _)
+;;  ("session:account" -> _)
+;;  ("session:Session" -> _)
+;;  ("schema:roleName" -> _))
+
+(define-graph books ("http://mu.semte.ch/graphs/public")
   ("bf:Work" -> _)
   ("schema:Person" -> _)
   ("schema:author" -> _)
-  ("schema:Review" -> _)
+  ("schema:Review" -> _))
+
+(define-graph users ("http://mu.semte.ch/graphs/public")
   ("foaf:Person" -> _)
   ("foaf:OnlineAccount" -> _)
-  ("account:Account" -> _)
-  ("session:account" -> _)
-  ("session:Session" -> _)
-  ("schema:roleName" -> _))
+  ("account:Account" -> _))
 
-(define-graph sessions ("http://mu.semte.ch/graphs/sessions/")
-  ("session:Session" -> _))
+(define-graph sessions ("http://mu.semte.ch/graphs/public")
+  ("session:Session" -> _)
+  ("schema:roleName" -> _)
+  ("session:account" -> _))
+
+(define-graph reviews ("http://mu.semte.ch/graphs/public")
+  ("schema:Review" -> _)
+  ("schema:about" -> _))
+
+(define-graph authors ("http://mu.semte.ch/graphs/public")
+  ("schema:Person" -> _)
+  ("schema:author" -> _))
 
 ;; Example:
 ;; (define-graph company ("http://mu.semte.ch/graphs/companies/")
@@ -96,22 +117,26 @@
 (supply-allowed-group "admin"
   :query "PREFIX session: <http://mu.semte.ch/vocabularies/session/>
           PREFIX schema: <http://schema.org/>
-          SELECT DISTINCT ?account WHERE {
+          SELECT ?account WHERE {
             <SESSION_ID> session:account ?account .
             ?account schema:roleName \"admin\" .
-          }"
+          } LIMIT 1"
   :parameters ("account"))
 
 (grant (read)
-       :to-graph public
+       :to-graph (books)
        :for-allowed-group "public")
 
-(grant (read write)
-       :to-graph (public sessions)
+(grant (read)
+       :to-graph (sessions books authors reviews users)
+       :for-allowed-group "reader")
+
+(grant (write)
+       :to-graph (sessions reviews)
        :for-allowed-group "reader")
 
 (grant (read write)
-       :to-graph public
+       :to-graph (sessions books authors reviews users)
        :for-allowed-group "admin")
 
 ;; example:
