@@ -40,7 +40,7 @@
   ;; Custom prefix URIs here, prefix casing is ignored
   :bf "http://id.loc.gov/ontologies/bibframe/"
   :schema "http://schema.org/"
-  :account "http://example.org/bookreview/account/"
+  :account "http://mu.semte.ch/services/registration-service/accounts/"
   :foaf "http://xmlns.com/foaf/0.1/"
   )
 
@@ -58,11 +58,16 @@
   ("bf:Work" -> _)
   ("schema:Person" -> _)
   ("schema:author" -> _)
-  ("account:Account" -> _)
   ("schema:Review" -> _)
   ("foaf:Person" -> _)
   ("foaf:OnlineAccount" -> _)
-  ("session:account" -> _))
+  ("account:Account" -> _)
+  ("session:account" -> _)
+  ("session:Session" -> _)
+  ("schema:roleName" -> _))
+
+(define-graph sessions ("http://mu.semte.ch/graphs/sessions/")
+  ("session:Session" -> _))
 
 ;; Example:
 ;; (define-graph company ("http://mu.semte.ch/graphs/companies/")
@@ -79,9 +84,35 @@
 
 (supply-allowed-group "public")
 
-(grant (read write)
+(supply-allowed-group "reader"
+  :query "PREFIX session: <http://mu.semte.ch/vocabularies/session/>
+          PREFIX schema: <http://schema.org/>
+          SELECT ?account WHERE {
+            <SESSION_ID> session:account ?account .
+            ?account schema:roleName \"reader\" .
+          } LIMIT 1"
+  :parameters ("account"))
+
+(supply-allowed-group "admin"
+  :query "PREFIX session: <http://mu.semte.ch/vocabularies/session/>
+          PREFIX schema: <http://schema.org/>
+          SELECT DISTINCT ?account WHERE {
+            <SESSION_ID> session:account ?account .
+            ?account schema:roleName \"admin\" .
+          }"
+  :parameters ("account"))
+
+(grant (read)
        :to-graph public
        :for-allowed-group "public")
+
+(grant (read write)
+       :to-graph (public sessions)
+       :for-allowed-group "reader")
+
+(grant (read write)
+       :to-graph public
+       :for-allowed-group "admin")
 
 ;; example:
 
