@@ -68,8 +68,6 @@
 (define-resource account ()
   :class (s-prefix "foaf:OnlineAccount")
   :properties `((:nickname :string ,(s-prefix "foaf:accountName"))
-                (:password :string ,(s-prefix "account:password"))
-                (:salt :string ,(s-prefix "account:salt"))
                 (:status :Resource ,(s-prefix "account:status"))
                 (:created :dateTime ,(s-prefix "dct:created"))
                 (:modified :dateTime ,(s-prefix "dct:modified"))

@@ -1,0 +1,23 @@
+PREFIX schema: <http://schema.org/>
+PREFIX reader: <http://example.org/bookreview/reader/>
+PREFIX account: <http://example.org/bookreview/account/>
+PREFIX review: <http://example.org/bookreview/review/>
+PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
+
+DELETE {
+  GRAPH <http://mu.semte.ch/graphs/public> {
+    ?review schema:author ?oldPerson .
+  }
+}
+INSERT {
+  GRAPH <http://mu.semte.ch/graphs/public> {
+    ?review schema:author ?account .
+  }
+}
+WHERE {
+  GRAPH <http://mu.semte.ch/graphs/public> {
+    ?review a schema:Review ;
+            schema:author ?oldPerson .
+    ?oldPerson account:account ?account .
+  }
+}
