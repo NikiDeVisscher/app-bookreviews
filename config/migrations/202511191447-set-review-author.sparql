@@ -1,0 +1,33 @@
+PREFIX schema: <http://schema.org/>
+PREFIX review: <http://example.org/bookreview/review/>
+PREFIX reader: <http://example.org/bookreview/reader/>
+PREFIX account: <http://mu.semte.ch/services/registration-service/accounts/>
+PREFIX mu: <http://mu.semte.ch/vocabularies/core/>
+
+DELETE {
+  GRAPH <http://mu.semte.ch/graphs/public> {
+    review:review1 schema:author ?oldAuthor1 .
+    review:review2 schema:author ?oldAuthor2 .
+    review:review3 schema:author ?oldAuthor3 .
+    review:review4 schema:author ?oldAuthor4 .
+    review:review5 schema:author ?oldAuthor5 .
+  }
+}
+INSERT {
+  GRAPH <http://mu.semte.ch/graphs/public> {
+    review:review1 schema:author account:1658c5f5-e0a6-466c-a02e-f85f7f7541b0 .
+    review:review2 schema:author account:990d608f-d2e1-4d0c-a5f7-9ef5f71fce82 .
+    review:review3 schema:author account:1658c5f5-e0a6-466c-a02e-f85f7f7541b0 .
+    review:review4 schema:author account:4e3687bf-e00f-44e3-b110-ddda2ec3ebad .
+    review:review5 schema:author account:1658c5f5-e0a6-466c-a02e-f85f7f7541b0 .
+  }
+}
+WHERE {
+  GRAPH <http://mu.semte.ch/graphs/public> {
+    review:review1 schema:author ?oldAuthor1 .
+    review:review2 schema:author ?oldAuthor2 .
+    review:review3 schema:author ?oldAuthor3 .
+    review:review4 schema:author ?oldAuthor4 .
+    review:review5 schema:author ?oldAuthor5 .
+  }
+}
