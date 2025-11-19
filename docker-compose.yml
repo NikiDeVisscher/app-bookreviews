@@ -24,6 +24,22 @@ services:
     logging: *default-logging
 
   # Your extra services here
+  login:
+    image: semtech/mu-login-service:3.0.0
+    environment:
+      USERS_GRAPH: "http://mu.semte.ch/graphs/public"
+      SESSIONS_GRAPH: "http://mu.semte.ch/graphs/public"
+    links:
+      - database:database
+
+  registration:
+    image: semtech/mu-registration-service:2.8.0
+    environment:
+      USERS_GRAPH: "http://mu.semte.ch/graphs/public"
+      SESSIONS_GRAPH: "http://mu.semte.ch/graphs/public"
+    links:
+      - database:database
+
   rating-service:
     image: books-rating-service:0.1.0
   
