@@ -66,42 +66,34 @@
 ;;  ("session:Session" -> _)
 ;;  ("schema:roleName" -> _))
 
-(define-graph books ("http://mu.semte.ch/graphs/public")
+(define-graph public ("http://mu.semte.ch/graphs/public")
   ("bf:Work" -> _)
   ("schema:Person" -> _)
   ("schema:author" -> _)
   ("schema:Review" -> _))
 
-(define-graph users ("http://mu.semte.ch/graphs/public")
-  ("foaf:Person" -> _)
-  ("foaf:OnlineAccount" -> _)
-  ("account:Account" -> _))
+(define-graph books ("http://mu.semte.ch/graphs/public")
+  ("bf:Work" -> _)
+  ("schema:Person" -> _)
+  ("schema:author" -> _))
+
+(define-graph reviews ("http://mu.semte.ch/graphs/public")
+  ("schema:Review" -> _)
+  ("schema:about" -> _))
 
 (define-graph sessions ("http://mu.semte.ch/graphs/public")
   ("session:Session" -> _)
   ("schema:roleName" -> _)
   ("session:account" -> _))
 
-(define-graph reviews ("http://mu.semte.ch/graphs/public")
-  ("schema:Review" -> _)
-  ("schema:about" -> _))
+(define-graph accounts ("http://mu.semte.ch/graphs/public")
+  ("foaf:Person" -> _)
+  ("foaf:OnlineAccount" -> _)
+  ("account:Account" -> _)
+  ("schema:roleName" -> _))
 
-(define-graph authors ("http://mu.semte.ch/graphs/public")
-  ("schema:Person" -> _)
-  ("schema:author" -> _))
-
-;; Example:
-;; (define-graph company ("http://mu.semte.ch/graphs/companies/")
-;;   ("foaf:OnlineAccount"
-;;    -> "foaf:accountName"
-;;    -> "foaf:accountServiceHomepage")
-;;   ("foaf:Group"
-;;    -> "foaf:name"
-;;    -> "foaf:member"))
-
-
-;;;;;;;;;;;;;
-;; User roles
+(define-graph roles ("http://mu.semte.ch/graphs/public")
+  ("schema:roleName" -> _))
 
 (supply-allowed-group "public")
 
@@ -112,7 +104,7 @@
             <SESSION_ID> session:account ?account .
             ?account schema:roleName \"reader\" .
           } LIMIT 1"
-  :parameters ("account"))
+  :parameters ())
 
 (supply-allowed-group "admin"
   :query "PREFIX session: <http://mu.semte.ch/vocabularies/session/>
@@ -121,14 +113,18 @@
             <SESSION_ID> session:account ?account .
             ?account schema:roleName \"admin\" .
           } LIMIT 1"
-  :parameters ("account"))
+  :parameters ())
 
 (grant (read)
-       :to-graph (books)
+       :to-graph (books reviews)
+       :for-allowed-group "public")
+
+(grant (write)
+       :to-graph (sessions roles accounts)
        :for-allowed-group "public")
 
 (grant (read)
-       :to-graph (sessions books authors reviews users)
+       :to-graph (sessions books reviews accounts roles)
        :for-allowed-group "reader")
 
 (grant (write)
@@ -136,18 +132,5 @@
        :for-allowed-group "reader")
 
 (grant (read write)
-       :to-graph (sessions books authors reviews users)
+       :to-graph (sessions books reviews accounts roles)
        :for-allowed-group "admin")
-
-;; example:
-
-;; (supply-allowed-group "company"
-;;   :query "PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
-;;           SELECT DISTINCT ?uuid WHERE {
-;;             <SESSION_ID ext:belongsToCompany/mu:uuid ?uuid
-;;           }"
-;;   :parameters ("uuid"))
-
-;; (grant (read write)
-;;        :to company
-;;        :for "company")
