@@ -1,0 +1,22 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix schema: <http://schema.org/> .
+@prefix account: <http://mu.semte.ch/services/registration-service/accounts/> .
+@prefix mu: <http://mu.semte.ch/vocabularies/core/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+account:1658c5f5-e0a6-466c-a02e-f85f7f7541b0 a foaf:OnlineAccount ;
+    mu:uuid "1658c5f5-e0a6-466c-a02e-f85f7f7541b0" ;
+    foaf:accountName "An_Doe" ;
+    schema:roleName "reader" .
+
+account:990d608f-d2e1-4d0c-a5f7-9ef5f71fce82 a foaf:OnlineAccount ;
+    mu:uuid "990d608f-d2e1-4d0c-a5f7-9ef5f71fce82" ;
+    foaf:accountName "John_Smith" ;
+    schema:roleName "reader" .
+
+account:4e3687bf-e00f-44e3-b110-ddda2ec3ebad a foaf:OnlineAccount ;
+    mu:uuid "4e3687bf-e00f-44e3-b110-ddda2ec3ebad" ;
+    foaf:accountName "Lena_Martin" ;
+    schema:roleName "reader" .
