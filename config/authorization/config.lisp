@@ -54,18 +54,6 @@
 ;; specifications can be folded too.  This could help when building
 ;; indexes.
 
-;;(define-graph public ("http://mu.semte.ch/graphs/public")
-;;  ("bf:Work" -> _)
-;;  ("schema:Person" -> _)
-;;  ("schema:author" -> _)
-;;  ("schema:Review" -> _)
-;;  ("foaf:Person" -> _)
-;;  ("foaf:OnlineAccount" -> _)
-;;  ("account:Account" -> _)
-;;  ("session:account" -> _)
-;;  ("session:Session" -> _)
-;;  ("schema:roleName" -> _))
-
 (define-graph public ("http://mu.semte.ch/graphs/public")
   ("bf:Work" -> _)
   ("schema:Person" -> _)
