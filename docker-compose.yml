@@ -9,8 +9,10 @@ services:
   identifier:
     image: semtech/mu-identifier:1.10.3
     environment:
+      LOG_SESSION: "true"
       DEFAULT_ACCESS_CONTROL_ALLOW_ORIGIN_HEADER: "*"
       SESSION_COOKIE_SECURE: "on"
+      SESSION_COOKIE_HTTP_ONLY: "off"
     labels:
       - "logging=true"
     logging: *default-logging

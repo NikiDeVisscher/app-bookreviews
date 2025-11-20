@@ -40,7 +40,7 @@
   ;; Custom prefix URIs here, prefix casing is ignored
   :bf "http://id.loc.gov/ontologies/bibframe/"
   :schema "http://schema.org/"
-  :account "http://example.org/bookreview/account/"
+  :account "http://mu.semte.ch/services/registration-service/accounts/"
   :foaf "http://xmlns.com/foaf/0.1/"
   )
 
@@ -58,40 +58,67 @@
   ("bf:Work" -> _)
   ("schema:Person" -> _)
   ("schema:author" -> _)
-  ("account:Account" -> _)
+  ("schema:Review" -> _))
+
+(define-graph books ("http://mu.semte.ch/graphs/public")
+  ("bf:Work" -> _)
+  ("schema:Person" -> _)
+  ("schema:author" -> _))
+
+(define-graph reviews ("http://mu.semte.ch/graphs/public")
   ("schema:Review" -> _)
-  ("foaf:Person" -> _)
-  ("foaf:OnlineAccount" -> _)
+  ("schema:about" -> _))
+
+(define-graph sessions ("http://mu.semte.ch/graphs/public")
+  ("session:Session" -> _)
+  ("schema:roleName" -> _)
   ("session:account" -> _))
 
-;; Example:
-;; (define-graph company ("http://mu.semte.ch/graphs/companies/")
-;;   ("foaf:OnlineAccount"
-;;    -> "foaf:accountName"
-;;    -> "foaf:accountServiceHomepage")
-;;   ("foaf:Group"
-;;    -> "foaf:name"
-;;    -> "foaf:member"))
+(define-graph accounts ("http://mu.semte.ch/graphs/public")
+  ("foaf:Person" -> _)
+  ("foaf:OnlineAccount" -> _)
+  ("account:Account" -> _)
+  ("schema:roleName" -> _))
 
-
-;;;;;;;;;;;;;
-;; User roles
+(define-graph roles ("http://mu.semte.ch/graphs/public")
+  ("schema:roleName" -> _))
 
 (supply-allowed-group "public")
 
-(grant (read write)
-       :to-graph public
+(supply-allowed-group "reader"
+  :query "PREFIX session: <http://mu.semte.ch/vocabularies/session/>
+          PREFIX schema: <http://schema.org/>
+          SELECT ?account WHERE {
+            <SESSION_ID> session:account ?account .
+            ?account schema:roleName \"reader\" .
+          } LIMIT 1"
+  :parameters ())
+
+(supply-allowed-group "admin"
+  :query "PREFIX session: <http://mu.semte.ch/vocabularies/session/>
+          PREFIX schema: <http://schema.org/>
+          SELECT ?account WHERE {
+            <SESSION_ID> session:account ?account .
+            ?account schema:roleName \"admin\" .
+          } LIMIT 1"
+  :parameters ())
+
+(grant (read)
+       :to-graph (books reviews)
        :for-allowed-group "public")
 
-;; example:
+(grant (write)
+       :to-graph (sessions roles accounts)
+       :for-allowed-group "public")
 
-;; (supply-allowed-group "company"
-;;   :query "PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
-;;           SELECT DISTINCT ?uuid WHERE {
-;;             <SESSION_ID ext:belongsToCompany/mu:uuid ?uuid
-;;           }"
-;;   :parameters ("uuid"))
+(grant (read)
+       :to-graph (sessions books reviews accounts roles)
+       :for-allowed-group "reader")
 
-;; (grant (read write)
-;;        :to company
-;;        :for "company")
+(grant (write)
+       :to-graph (sessions reviews)
+       :for-allowed-group "reader")
+
+(grant (read write)
+       :to-graph (sessions books reviews accounts roles)
+       :for-allowed-group "admin")
